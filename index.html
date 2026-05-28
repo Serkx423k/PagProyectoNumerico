@@ -26,10 +26,64 @@
       justify-content: center;
     }
 
-    video {
+    /* --- Thumbnail overlay --- */
+    .thumbnail-overlay {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .thumbnail-overlay img {
       width: 100%;
       height: 100%;
-      object-fit: contain; 
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Play button centered on top of thumbnail */
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .thumbnail-overlay:hover .play-btn {
+      background: rgba(255, 0, 0, 0.85);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .play-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: #fff;
+      margin-left: 5px; 
+    }
+
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 1;
+      display: none;
+    }
+
+    iframe.active {
+      display: block;
     }
   </style>
 </head>
@@ -37,14 +91,38 @@
 
   <div class="video-wrapper">
 
-    <video
-      src="num.mp4"
-      poster="ART.png"
-      loop
-      playsinline
-      controls
-    ></video>
+
+    <div class="thumbnail-overlay" id="overlay" onclick="loadVideo()">
+      <img src="ART.png" alt="Video preview" />
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="6,3 20,12 6,21"/>
+        </svg>
+      </div>
+    </div>
+
+
+    <iframe
+      id="yt-iframe"
+      src=""
+      data-src="https://www.youtube.com/embed/oBojeMofxHE?autoplay=1&rel=0&modestbranding=1"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+
   </div>
+
+  <script>
+    function loadVideo() {
+      const overlay = document.getElementById('overlay');
+      const iframe  = document.getElementById('yt-iframe');
+
+ 
+      iframe.src = iframe.dataset.src;
+      iframe.classList.add('active');
+      overlay.style.display = 'none';
+    }
+  </script>
 
 </body>
 </html>
